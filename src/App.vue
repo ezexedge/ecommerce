@@ -1,18 +1,40 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+<Nav/>
+  <div class="container">
+
+  <div class="col-12 d-flex justify-content-between mt-5">
+  <div class="col-5">
+    <Login title="Login" />
+
+  </div>
+ <hr width="1" size="auto">
+  <div class="col-5">
+  <register title="Register" />
+
+  </div>
+  </div>
+
+  </div>
+
+
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+  import Nav from '../src/components/Nav.vue'
+  import Login from '../src/components/Login'
+  import Register from '../src/components/Register'
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    Nav,
+    Login,
+    Register 
+     }
 }
 </script>
 
@@ -23,6 +45,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  
 }
 </style>
