@@ -15,8 +15,11 @@
 
   </div>
   </div>
-
+<div class="mt-5">
+  <Carrito/>
+</div>
   </div>
+
 
 
   </div>
@@ -26,6 +29,7 @@
   import Nav from '../src/components/Nav.vue'
   import Login from '../src/components/Login'
   import Register from '../src/components/Register'
+  import Carrito from '../src/components/Carrito'
 
 
 export default {
@@ -33,7 +37,8 @@ export default {
   components: {
     Nav,
     Login,
-    Register 
+    Register,
+    Carrito
      }
 }
 </script>
