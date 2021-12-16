@@ -1,44 +1,19 @@
 <template>
   <div id="app">
-
-<Nav/>
-  <div class="container">
-
-  <div class="col-12 d-flex justify-content-between mt-5">
-  <div class="col-5">
-    <Login title="Login" />
-
+    <Nav/>
+    <router-view/>
   </div>
- <hr width="1" size="auto">
-  <div class="col-5">
-  <register title="Register" />
-
-  </div>
-  </div>
-
-  </div>
-
-
-
-  </div>
-
 </template>
-
 <script>
-  import Nav from '../src/components/Nav.vue'
-  import Login from '../src/components/Login'
-  import Register from '../src/components/Register'
-
-
+import Nav from './components/Nav.vue'
 export default {
   name: 'App',
   components: {
-    Nav,
-    Login,
-    Register
+    Nav
      }
 }
 </script>
+
 
 <style>
 #app {
@@ -47,6 +22,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>

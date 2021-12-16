@@ -3,30 +3,11 @@
     <h3 class="font-weight-bolder">{{title}}</h3>
     <form @submit.prevent="submit">
   <div class="form-group mb-3">
-    <input type="text" class=" form-control" v-model="$v.nombre.$model"
-     :class="{'is-invalid': $v.nombre.$error}"
-     id="formGroupExampleInput" placeholder="Nombre">
-
-  </div>
-
-    <div class="form-group mb-3">
-    <input type="text" class=" form-control" v-model="$v.apellido.$model" 
-     :class="{'is-invalid': $v.apellido.$error}"
-     id="formGroupExampleInput" placeholder="Apellido">
-
-  </div>
-
-
- <div class="form-group mb-3">
     <input type="text" class="form-control" v-model="$v.email.$model" 
     :class="{'is-invalid': $v.email.$error}"
     id="formGroupExampleInput" placeholder="Email">
     <p class="text-danger mt-2" v-if="!$v.email.email" >El email ingresado incorrecto</p>
   </div>
-
-  
-
-
   <div class="form-group">
     <input type="password" class="form-control" v-model="$v.password.$model"
     
@@ -36,10 +17,10 @@
 
   </div>
 
+
  
-      <button  class=" mt-3 btn btn-primary" @click="submit" :disabled="$v.$invalid" type="submit">Registrarse</button>
-  
- 
+      <button  class=" mt-3 btn btn-primary" @click="submit" :disabled="$v.$invalid" type="submit">Iniciar sesion</button>
+
 
 </form>
 
@@ -49,52 +30,64 @@
 
 <script>
 import {required,email,minLength} from 'vuelidate/lib/validators'
-
     export default {
-
-        props : {
+        
+        props:{
             title: String
         },
         data(){
-            return{
-                nombre: '',
-                apellido: '',
+            return {
                 email: '',
                 password: '',
                 errorSubmit: false
             }
         },
-             validations:{
-            nombre: {required},
-            apellido: {required},
+        validations:{
+        
             email: {required,email},
             password: {required,
              minLength: minLength(6) 
             }
         },
         methods:{
-           submit(){
+            submit(){
                 this.errorSubmit =  false
                     this.$v.$touch()
 
+
+
+ 
                     if(this.$v.$invalid){
                         console.log('se genero un error')
-
                         this.errorSubmit = true
-
-
                     }else{
 
-                        console.log('procesnado datos')
+                        if(this.email === 'admin@gmail.com' && this.password === '123456'){
+                            
+                           this.$router.push('/admin')
+
+                        }
+                          else if(this.email === 'cliente@gmail.com' && this.password === '123456'){
+                            
+                           this.$router.push('/cliente')
+
+                        }else{
+     this.$toasted.show('Error el usuario no existe',{
+        duration:800,
+        type:'error'
+      })
+                        }
+
+                   
+
                     }
-
             }
-        } 
-
-        
+        },
+        mounted(){
+   
+        }
     }
 </script>
 
 <style lang="scss" scoped>
-
 </style>
