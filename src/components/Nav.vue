@@ -2,10 +2,22 @@
     <div>
 <nav class="navbar navbar-dark bg-dark justify-content-between">
 <div class="container">
-  <a class="navbar-brand text-light " @click="irInicio" >Tienda fake</a>
-       <div class="col-3 d-flex justify-content-end" @click="irCarrito">
-        <v-icon name="shopping-cart"  class="icono"></v-icon>
+  <a href="#" class="navbar-brand text-light " @click="irInicio" >Tienda fake</a>
+
+      
+
+
+       <div class="col-3" @click="irLogin">
+       
+        <v-icon name="user"  class="icono"></v-icon>
        </div>
+       
+       <div class="col-3" @click="irCarrito">
+
+                <v-icon name="shopping-cart"  class="icono"></v-icon>
+       </div>
+
+
 </div>
 </nav>
     </div>
@@ -19,6 +31,9 @@
             },
                   irCarrito(){
                this.$router.push('/cliente')
+            },
+                      irLogin(){
+               this.$router.push('/login')
             }
         }
     }
@@ -26,7 +41,7 @@
 
 <style lang="css" scoped>
  .icono {
- width: 12%;
+ width: 15%;
  color: white;
  cursor: pointer;
  }

@@ -1,18 +1,86 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+
+    <div v-if="loading === false" class="container mt-5">
+        <div class="col-12 d-flex  flex-wrap  justify-content-around" >
+            <div v-for="(item,index) in lista" :key="index" class="card  col-3  ">
+  <img class="card-img-top" src="https://img.lalr.co/cms/2017/04/12033800/Productos_Vendidos_CocaCola1204.jpg?size=md" alt="Card image cap">
+  <div class="card-body">
+    <h4 class="card-title">{{item.nombre}}</h4>
+    <div class="card-text">
+      <p> Precio: ${{item.precio}}</p>
+      <p>Cantidad: {{item.cantidad}}</p>
+
+
+    </div>
+    
+    <a href="#!" v-if="encontrado(item.id,carrito) === false" @click="agregar(item)" class="btn btn-primary">Agregar a carrito</a>
+      <a href="#!" v-else :disabled="true" class="btn btn-secondary">Agregado al carrito</a>
+
+  </div>
+</div>
+
+        </div>
+
+    </div>
+    <div v-else class="spinner-border mt-5" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+    import {productos} from '../api'
+import {mapGetters} from 'vuex'
 
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  export default {
+
+    data(){
+      return{
+        lista: [],
+        loading: false
+      }
+    },
+    computed:{
+               ...mapGetters(['carrito'])
+    },
+    methods:{
+      agregar(obj){
+      
+             this.$store.dispatch("setProducto", obj)
+      },
+      async getAll(){
+
+        this.loading = true
+        let result = await productos()
+        if(result){
+          this.loading = false
+        }
+        this.lista = result
+      },
+      encontrado(id,carrito){
+          let encontrado = carrito.find(val => val.id === id)
+          if(encontrado){
+            return true
+          }else{
+            return false
+          }
+      }
+
+    },
+    mounted(){
+
+      this.getAll()
+
+    }
   }
-}
 </script>
+
+<style lang="css" scoped>
+   .card {
+      border: 1px solid #ccc;
+      background-color: #f4f4f4;
+      margin: 1px !important;
+      margin-bottom: 10px!important;
+    }
+</style>
