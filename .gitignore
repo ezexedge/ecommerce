@@ -3,6 +3,9 @@ node_modules
 /dist
 
 
+vue/node_modules
+/vue/node_modules
+
 # local env files
 .env.local
 .env.*.local
