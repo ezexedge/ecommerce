@@ -27,7 +27,7 @@
         <a href="#" class="font-weight-bold " @click="redirectRegister">Registrarse</a>
    
     <div class="d-flex flex-column mt-5">
-     <p class="mb-5">Ingresar como admin:</p>
+     <p class="mb-5 font-weight-bold">Ingresar como admin:</p>
 
      <p>admin@gmail.com</p>
     <p>123456</p>
