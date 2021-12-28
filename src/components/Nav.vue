@@ -12,10 +12,18 @@
         <v-icon name="log-in"  class="icono"></v-icon>
        </div>
 
+
+
              <div v-else class="col-3" @click="irCliente">
        
         <v-icon name="user"  class="icono"></v-icon>
        </div>
+
+           <div v-if="currentUser" class="col-3" @click="logout">
+       
+        <v-icon name="log-out"  class="icono"></v-icon>
+       </div>
+
        
        <div class="col-3" @click="irCarrito">
 
@@ -44,7 +52,15 @@ import {mapGetters} from 'vuex'
             },
                             irCliente(){
                this.$router.push('/cliente')
-            }
+            },
+             logout(){
+             
+                 this.$store.dispatch('logoutUser')
+                 this.$store.dispatch('setVaciar')
+
+               this.$router.push('/login')
+
+             }
         },
         computed:{
                ...mapGetters(['currentUser'])

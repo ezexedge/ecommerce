@@ -68,6 +68,7 @@ import {mapGetters} from 'vuex'
               const result =    await firebase.firestore().collection('compras').add(obj)
               console.log('guardando envio',result)
               this.loading = false
+                 this.$store.dispatch('setVaciar')
 
               this.$router.push('/cliente')
                  }

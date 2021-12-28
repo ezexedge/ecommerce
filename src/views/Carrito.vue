@@ -27,7 +27,8 @@
 <h3 class="font-weight-bold">Precio final: {{precioTotal}}</h3>
 </div>
   <div class="col-12 d-flex justify-content-end mt-4 pr-5">
-  <button v-if="carrito.length > 0" @click="redirectCheckout()" class="btn btn-success">Finalizar Compra</button>
+  <button v-if="carrito.length > 0 && currentUser !== null" @click="redirectCheckout()" class="btn btn-success">Finalizar Compra</button>
+    <button v-if="currentUser === null" @click="redirectLogin()" class="btn btn-success">Iniciar sesion</button>
 
   </div>
     </div>
@@ -44,7 +45,7 @@ import {mapGetters} from 'vuex'
                }
            },
              computed: {
-               ...mapGetters(['carrito','precioTotal'])
+               ...mapGetters(['carrito','precioTotal','currentUser'])
               
 
            },methods:{
@@ -54,6 +55,9 @@ import {mapGetters} from 'vuex'
                },
                redirectCheckout(){
                 this.$router.push('/checkout')
+               },
+                    redirectLogin(){
+                this.$router.push('/login')
                }
            }
 

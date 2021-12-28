@@ -13,6 +13,9 @@ export default new Vuex.Store({
     SET_PRODUCTO(state,producto){
       state.carrito.push(producto)
     },
+    SET_VACIAR(state){
+      state.carrito = []
+    },
     DELETE_PRODUCTO(state,id){
       state.carrito = state.carrito.filter(val => val.id !== id)
     },
@@ -28,7 +31,9 @@ export default new Vuex.Store({
     
   },
   actions: {
-
+    setVaciar({commit}){
+      commit('SET_VACIAR')
+      },
     setProducto({commit},producto){
       commit('SET_PRODUCTO',producto)
   },

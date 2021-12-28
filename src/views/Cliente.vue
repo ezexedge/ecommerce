@@ -4,7 +4,15 @@
 
     <div class=" d-flex justify-content-center flex-column  ">
 
-        <div v-for="(item, index) in compras" :key="index" class="mt-5  card text-white bg-primary mb-3 d-inline-block col-6" >
+    <div v-if="loading === false && compras.length === 0" class="list-group mt-5">
+  <p class="list-group-item list-group-item-action list-group-item-success">No has realizado una compra</p>
+</div>
+
+<div v-if="loading === true" class="spinner-border" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+
+        <div v-else  v-for="(item, index) in compras" :key="index" class="mt-5  card text-white bg-primary mb-3 d-inline-block col-6" >
   <div class="card-header">fecha: {{item.fecha}}</div>
   <div class="card-body">
     <h4 class="card-title">Valor de compra: {{item.precioFinal}}</h4>
@@ -35,12 +43,15 @@ import 'firebase/firestore';
     export default {
         data(){
             return{
-                compras: []
+                compras: [],
+                loading: false
             }
         },
         methods:{
 
            async  getComprar(valor){
+
+            this.loading = true
               const result = await firebase.firestore().collection('compras').get()
 
               let docs = []
@@ -52,6 +63,7 @@ import 'firebase/firestore';
             console.log('respuesta',arr)
 
             this.compras = arr
+            this.loading = false
             }
         
         },
