@@ -7,7 +7,12 @@
       
 
 
-       <div class="col-3" @click="irLogin">
+       <div v-if="currentUser === null" class="col-3" @click="irLogin">
+       
+        <v-icon name="log-in"  class="icono"></v-icon>
+       </div>
+
+             <div v-else class="col-3" @click="irCliente">
        
         <v-icon name="user"  class="icono"></v-icon>
        </div>
@@ -24,17 +29,25 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
     export default {
         methods:{
             irInicio(){
                this.$router.push('/')
             },
                   irCarrito(){
-               this.$router.push('/cliente')
+               this.$router.push('/carrito')
             },
                       irLogin(){
                this.$router.push('/login')
+            },
+                            irCliente(){
+               this.$router.push('/cliente')
             }
+        },
+        computed:{
+               ...mapGetters(['currentUser'])
         }
     }
 </script>

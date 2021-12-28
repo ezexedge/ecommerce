@@ -1,7 +1,7 @@
 <template>
     <div>
     <h3 class="font-weight-bolder">{{title}}</h3>
-    <form @submit.prevent="submit">
+    <form @submit.prevent="submit" class="mb-5">
   <div class="form-group mb-3">
     <input type="text" class="form-control" v-model="$v.email.$model" 
     :class="{'is-invalid': $v.email.$error}"
@@ -24,11 +24,14 @@
 
 </form>
 
+        <a href="#" class="font-weight-bold " @click="redirectRegister">Registrarse</a>
 
     </div>
 </template>
 
 <script>
+import * as firebase from "firebase/app";
+import "firebase/auth";
 import {required,email,minLength} from 'vuelidate/lib/validators'
     export default {
         
@@ -50,7 +53,7 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
             }
         },
         methods:{
-            submit(){
+           async submit(){
                 this.errorSubmit =  false
                     this.$v.$touch()
 
@@ -62,26 +65,45 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
                         this.errorSubmit = true
                     }else{
 
-                        if(this.email === 'admin@gmail.com' && this.password === '123456'){
-                            
-                           this.$router.push('/admin')
 
-                        }
-                          else if(this.email === 'cliente@gmail.com' && this.password === '123456'){
-                            
-                           this.$router.push('/cliente')
+     try{
 
-                        }else{
-     this.$toasted.show('Error el usuario no existe',{
+       
+       const result =  await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+
+          if(result){
+
+           
+              this.$store.dispatch('setUser', result.user)
+            
+            if(this.email === 'admin@gmail.com'){
+              this.$router.push('/admin')
+
+              }else{
+                 this.$router.push('/cliente')
+
+              }
+          }
+console.log('result',result)
+        }catch(err){
+
+           this.error = err.message
+             this.$toasted.show(err.message,{
         duration:800,
         type:'error'
       })
-                        }
+        }
+
+   
+                        
 
                    
 
                     }
-            }
+            },
+             redirectRegister(){
+                this.$router.push('/registrar')
+         }
         },
         mounted(){
    

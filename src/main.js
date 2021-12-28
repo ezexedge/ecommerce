@@ -13,6 +13,25 @@ import Toasted from "vue-toasted";
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+import * as firebase from 'firebase/app'
+import 'firebase/auth'
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBJDRpEXJcJoTnsIZChAG2uboJhVOTJSDI",
+  authDomain: "clasificados-32010.firebaseapp.com",
+  databaseURL: "https://clasificados-32010-default-rtdb.firebaseio.com",
+  projectId: "clasificados-32010",
+  storageBucket: "clasificados-32010.appspot.com",
+  messagingSenderId: "997093059400",
+  appId: "1:997093059400:web:6e78f4ca4ed1bce971617d"
+};
+
+
+firebase.initializeApp(firebaseConfig)
+
+
+
+
 Vue.use(Toasted);
 
 Vue.use(BootstrapVue)
@@ -29,3 +48,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+

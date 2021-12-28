@@ -18,7 +18,16 @@
                         <input  type="text" v-model="nombre"  placeholder="nombre" class="form-control">
                         <input  type="text" v-model="precio" placeholder="precio" class="form-control mt-4 mb-4">
                         <input  type="text" v-model="cantidad"  placeholder="cantidad" class="form-control">
+         <label for="exampleFormControlFile1">Example file input</label>
 
+                        <input type="file"  v-if="loading === false" @change="previewImage"
+                        
+
+                         class="form-control-file" id="exampleFormControlFile1">
+  <div v-else class="spinner-border text-primary" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+  
                     </div>
                     <!-- errors -->
                  
@@ -26,6 +35,8 @@
               </div>
 
               <div class="modal-footer">
+
+
                               <button  type="button" @click="agregarProducto" class="btn btn-primary">Agregar producto</button>
 
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -51,7 +62,7 @@
                         <input  type="text" v-model="nombre"  placeholder="nombre" class="form-control">
                         <input  type="text" v-model="precio" placeholder="precio" class="form-control mt-4 mb-4">
                         <input  type="text" v-model="cantidad"  placeholder="cantidad" class="form-control">
-
+         
                     </div>
                     <!-- errors -->
                  
@@ -72,6 +83,9 @@
 
 </div>
 
+
+
+
 <table class="table mt-5">
   <thead>
     <tr>
@@ -80,6 +94,7 @@
       <th>Nombre</th>
       <th>Precio</th>
       <th>Cantidad</th>
+      <th>Imagen</th>
       <th>Editar</th>
       <th>Eliminar</th>
 
@@ -91,18 +106,23 @@
     <td>{{item.nombre}}</td>
       <td>{{ item.precio }}</td>
         <td>{{ item.cantidad }}</td>
+        <td class="w-25"><img :src="item.imagen" class="img-fluid img-thumbnail" alt="Sheep"></td>
                <td><a href="#" @click="openModalModificar(item.id)" class="btn btn-info">editar</a></td>
                <td><a href="#" @click="eliminarProducto(item.id)" class="btn btn-danger">eliminar</a></td>
 
   </tr>
   </tbody>
 </table>
+
     </div>
 </template>
 
 <script>
+import * as firebase from "firebase/app";
+import 'firebase/storage';
+import 'firebase/firestore'
     import $ from 'jquery'
-    import {productos,eliminar,agregar,productoById,modificar} from '../api'
+    import {productoById,modificar} from '../api'
     export default {
 
         data(){
@@ -111,17 +131,55 @@
                 nombre: '',
                 precio: '',
                 cantidad:'',
-                idModificar: ''
+                idModificar: '',
+                imagenData: '',
+                imagenUrl: '',
+                loading: false
             }
         },
         methods:{
 
            async llamada(){
+
+              const snapshot = await firebase.firestore().collection('articulos').get()
+            let docs = []
+             snapshot.forEach((doc) => {
+            docs.push({ ...doc.data(), id: doc.id });
+          });
                
-               const result = await productos()
-               this.productos = result
+               console.log(docs)
+               this.productos = docs
            
             },
+            previewImage(event) {
+            this.imagenData = event.target.files[0];  
+          this.loading = true
+
+                          const storageRef = firebase.storage().ref();
+
+            const docRef = storageRef.child(`imagenes/${this.imagenData.name}`);
+        docRef.put(this.imagenData).on(
+        "state_changed",
+        (snapshot) => {
+          console.log(snapshot);
+          
+        },
+        (err) => {
+          console.log(err);
+        },
+        async () => {
+
+          this.imagenUrl = await docRef.getDownloadURL();
+          if(this.imagenUrl !== ''){
+            this.loading = false
+          }
+    
+}
+
+
+      );
+
+},
             async getProducto(id){
                 const result = await productoById(id)
                 console.log('id',result)
@@ -133,29 +191,49 @@
 
             },
             async eliminarProducto(id){
-                await eliminar(id)
-                this.llamada()
+              
+                console.log('eliminar',id)
+                   const productoQuery = await firebase.firestore().collection('articulos').doc(id).delete()
+                    console.log(productoQuery)
+
+                    this.llamada()
                 
             },
             openModal(){
                  $('#channelModal').appendTo("body").modal('show');
             },
+            openBtn(){
+  $('.dropdown').click(function(){
+  $('#dropdownMenu1').toggleClass('show');
+});
+   
+            },
+
                 openModalModificar(id){
                
                     this.getProducto(id)
                     this.idModificar = id
                  $('#channelModal2').appendTo("body").modal('show');
             },
-           async agregarProducto(){
-                let obj = {
+       async   agregarProducto(){
+
+      
+
+    
+        
+             
+             let obj = {
                     nombre: this.nombre,
                     cantidad: this.cantidad,
-                    precio: this.precio
+                    precio: this.precio,
+                    imagen: this.imagenUrl
                 }
 
-                console.log(obj)
 
-                    await agregar(obj)
+                    await firebase.firestore().collection('articulos').add(obj)
+
+
+                    this.imagenUrl = ''
                     this.nombre = ''
                     this.precio = ''
                     this.cantidad = ''

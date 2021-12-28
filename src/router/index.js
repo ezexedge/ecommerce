@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Auth from '../views/Auth.vue'
 import Admin from '../views/Admin.vue'
-import Cliente from '../views/Cliente.vue'
+import Carrito from '../views/Carrito.vue'
 import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
+import Checkout from '../views/Checkout.vue'
+import Cliente from '../views/Cliente.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -13,14 +17,29 @@ const routes = [
     component: Home
   },
   {
-    path: '/login',
-    name: 'auth',
-    component: Auth
-  },
-  {
     path: '/admin',
     name: 'admin',
     component: Admin
+  },
+  {
+    path: '/carrito',
+    name: 'carrito',
+    component: Carrito
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/registrar',
+    name: 'register',
+    component: Register
+  },
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: Checkout
   },
   {
     path: '/cliente',

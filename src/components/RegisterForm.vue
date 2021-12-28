@@ -1,20 +1,20 @@
 <template>
     <div>
     <h3 class="font-weight-bolder">{{title}}</h3>
-    <form @submit.prevent="submit">
-  <div class="form-group mb-3">
-    <input type="text" class=" form-control" v-model="$v.nombre.$model"
-     :class="{'is-invalid': $v.nombre.$error}"
-     id="formGroupExampleInput" placeholder="Nombre">
+    <form @submit.prevent="submit" class="mb-5">
 
+
+  
+ <div class="form-group mb-3">
+    <input type="text" class="form-control" v-model="nombre" 
+    id="formGroupExampleInput" placeholder="nombre">
   </div>
 
-    <div class="form-group mb-3">
-    <input type="text" class=" form-control" v-model="$v.apellido.$model" 
-     :class="{'is-invalid': $v.apellido.$error}"
-     id="formGroupExampleInput" placeholder="Apellido">
-
+   <div class="form-group mb-3">
+    <input type="text" class="form-control" v-model="apellido" 
+    id="formGroupExampleInput" placeholder="apellido">
   </div>
+
 
 
  <div class="form-group mb-3">
@@ -42,36 +42,39 @@
  
 
 </form>
+        <a href="#" class="font-weight-bold " @click="redirectLogin">Tenes una cuenta?  iniciar sesion</a>
 
 
     </div>
 </template>
 
 <script>
+import * as firebase from "firebase/app";
+import 'firebase/firestore';
+import "firebase/auth";
 import {required,email,minLength} from 'vuelidate/lib/validators'
     export default {
         props : {
             title: String
         },
-        data(){
+          data(){
             return{
-                nombre: '',
-                apellido: '',
+                nombre:'',
+                apellido:'',
                 email: '',
-                password: '',
+                password:'',
                 errorSubmit: false
             }
         },
              validations:{
-            nombre: {required},
-            apellido: {required},
+     
             email: {required,email},
             password: {required,
              minLength: minLength(6) 
             }
         },
         methods:{
-           submit(){
+         async  submit(){
                 this.errorSubmit =  false
                     this.$v.$touch()
                     if(this.$v.$invalid){
@@ -79,7 +82,27 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
                         this.errorSubmit = true
                     }else{
                         console.log('procesnado datos')
+
+                    const result =  await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+                    console.log('resultado',result)
+                        if(result.operationType){
+
+                            let obj = {
+                                nombre: this.nombre,
+                                apellido: this.apellido,
+                                email: this.email,
+                                password: this.password,
+                            }
+
+                            await firebase.firestore().collection('users').add(obj)
+                            
+                            this.$router.push('/login')
+
+                        }
                     }
+            },
+            redirectLogin(){
+                this.$router.push('/login')
             }
         } 
         
@@ -88,3 +111,4 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
 
 <style lang="scss" scoped>
 </style>
+

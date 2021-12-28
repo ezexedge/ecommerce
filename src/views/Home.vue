@@ -4,7 +4,7 @@
     <div v-if="loading === false" class="container mt-5">
         <div class="col-12 d-flex  flex-wrap  justify-content-around" >
             <div v-for="(item,index) in lista" :key="index" class="card  col-3  ">
-  <img class="card-img-top" src="https://img.lalr.co/cms/2017/04/12033800/Productos_Vendidos_CocaCola1204.jpg?size=md" alt="Card image cap">
+  <img class="card-img-top" :src="item.imagen" alt="Card image cap">
   <div class="card-body">
     <h4 class="card-title">{{item.nombre}}</h4>
     <div class="card-text">
@@ -30,7 +30,9 @@
 </template>
 
 <script>
-    import {productos} from '../api'
+import * as firebase from "firebase/app";
+import 'firebase/storage';
+import 'firebase/firestore'
 import {mapGetters} from 'vuex'
 
   export default {
@@ -52,12 +54,19 @@ import {mapGetters} from 'vuex'
       async getAll(){
 
         this.loading = true
-        let result = await productos()
-        if(result){
+
+             const snapshot = await firebase.firestore().collection('articulos').get()
+            let docs = []
+             snapshot.forEach((doc) => {
+            docs.push({ ...doc.data(), id: doc.id });
+          });
+
+        if(snapshot){
           this.loading = false
         }
-        this.lista = result
+        this.lista = docs
       },
+          
       encontrado(id,carrito){
           let encontrado = carrito.find(val => val.id === id)
           if(encontrado){

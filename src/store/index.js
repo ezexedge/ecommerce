@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     carrito: [],
-    pepas: 'pepasss'
+    pepas: 'pepasss',
+    currentUser: localStorage.getItem('user') ?   JSON.parse(localStorage.getItem('user'))  : null
   },
   mutations: {
     SET_PRODUCTO(state,producto){
@@ -15,6 +16,15 @@ export default new Vuex.Store({
     DELETE_PRODUCTO(state,id){
       state.carrito = state.carrito.filter(val => val.id !== id)
     },
+      SET_USER(state,user){
+      localStorage.setItem('user',JSON.stringify(user))
+      state.currentUser = user
+    },
+    LOGOUT_USER(state){
+      localStorage.removeItem('user')
+      
+      state.currentUser = null
+    }
     
   },
   actions: {
@@ -25,10 +35,18 @@ export default new Vuex.Store({
   deleteProducto({commit},producto){
     commit('DELETE_PRODUCTO',producto)
 },
- 
+    setUser({commit},user){
+      commit('SET_USER',user)
+    },
+    logoutUser({commit}){
+    commit('LOGOUT_USER')
+    }
 },
   getters:{
-    carrito: state => state.carrito
+    carrito: state => state.carrito,
+    precioTotal: state =>  state.carrito.length  > 0 ?  state.carrito.reduce((sum,li) => sum +  Number(li.precio),0 ) : 0 ,
+    currentUser: state => state.currentUser,
+
   },
 
   
