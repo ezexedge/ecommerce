@@ -19,7 +19,14 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: Admin
+    component: Admin,
+    beforeEnter: (to, from, next) => {
+      if(localStorage.getItem('user')){
+        next()
+      }else{
+        next('/login')
+      }
+  }
   },
   {
     path: '/carrito',
@@ -39,12 +46,26 @@ const routes = [
   {
     path: '/checkout',
     name: 'checkout',
-    component: Checkout
+    component: Checkout,
+    beforeEnter: (to, from, next) => {
+      if(localStorage.getItem('user')){
+        next()
+      }else{
+        next('/login')
+      }
+  }
   },
   {
     path: '/cliente',
     name: 'cliente',
-    component: Cliente
+    component: Cliente,
+    beforeEnter: (to, from, next) => {
+        if(localStorage.getItem('user')){
+          next()
+        }else{
+          next('/login')
+        }
+    }
   }
 ]
 
