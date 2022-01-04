@@ -14,7 +14,12 @@
 
 
 
-             <div v-else class="col-3" @click="irCliente">
+             <div v-if="currentUser !== null && currentUser.email !== 'admin@gmail.com'" class="col-3" @click="irCliente">
+       
+        <v-icon name="user"  class="icono"></v-icon>
+       </div>
+
+               <div v-if="currentUser !== null && currentUser.email === 'admin@gmail.com'" class="col-3" @click="irAdmin">
        
         <v-icon name="user"  class="icono"></v-icon>
        </div>
@@ -52,6 +57,9 @@ import {mapGetters} from 'vuex'
             },
                             irCliente(){
                this.$router.push('/cliente')
+            },
+                              irAdmin(){
+               this.$router.push('/admin')
             },
              logout(){
              

@@ -16,6 +16,7 @@
     
     <a href="#!" v-if="encontrado(item.id,carrito) === false" @click="agregar(item)" class="btn btn-primary">Agregar a carrito</a>
       <a href="#!" v-else :disabled="true" class="btn btn-secondary">Agregado al carrito</a>
+    <a href="#!"  @click="redirectProducto(item.id)"  class="mt-2 btn btn-success">Ver producto</a>
 
   </div>
 </div>
@@ -51,6 +52,10 @@ import {mapGetters} from 'vuex'
       
              this.$store.dispatch("setProducto", obj)
       },
+      redirectProducto(val){
+       
+                       this.$router.push(`/producto/${val}`)
+      },
       async getAll(){
 
         this.loading = true
@@ -64,6 +69,7 @@ import {mapGetters} from 'vuex'
         if(snapshot){
           this.loading = false
         }
+        console.log('doccc',docs)
         this.lista = docs
       },
           

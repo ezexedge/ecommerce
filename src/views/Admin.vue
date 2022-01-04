@@ -20,13 +20,14 @@
                         <input  type="text" v-model="cantidad"  placeholder="cantidad" class="form-control">
          <label for="exampleFormControlFile1">Example file input</label>
 
-                        <input type="file"  v-if="loading === false" @change="previewImage"
-                        
+                        <input type="file"  v-if="imagenUrl === '' && loading === false" @change="previewImage"
 
                          class="form-control-file" id="exampleFormControlFile1">
-  <div v-else class="spinner-border text-primary" role="status">
+  <div v-if="loading === true" class="spinner-border text-primary" role="status">
   <span class="sr-only">Loading...</span>
 </div>
+                         <p v-if="imagenUrl !== ''" class="text-success">Imagen cargada</p>
+
   
                     </div>
                     <!-- errors -->

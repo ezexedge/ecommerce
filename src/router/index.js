@@ -7,6 +7,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Checkout from '../views/Checkout.vue'
 import Cliente from '../views/Cliente.vue'
+import Producto from '../views/Producto.vue'
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,11 @@ const routes = [
     path: '/carrito',
     name: 'carrito',
     component: Carrito
+  },
+    {
+    path: '/producto/:id',
+    name: 'producto',
+    component: Producto
   },
   {
     path: '/login',
@@ -71,7 +77,6 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes
 })
 
