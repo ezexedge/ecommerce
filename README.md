@@ -16,6 +16,10 @@ password: 123456
 
 ```
 
+# Tienda en produccion
+
+https://ecommerce-qmida.ondigitalocean.app/
+
 
 ## Project setup
 ```
