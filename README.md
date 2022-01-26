@@ -21,6 +21,9 @@ password: 123456
 https://ecommerce-qmida.ondigitalocean.app/
 
 
+
+
+
 ## Project setup
 ```
 npm install
