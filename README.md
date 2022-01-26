@@ -1,4 +1,21 @@
-# teeest
+# Tienda fake
+
+-Tienda realizada con vue , vuex , bootstrap y firebase como base de datos
+
+El usuario podra registrarse e iniciar sesion. Una vez que inicia sesion podra agregar al carrito de compras articulos eligiendo segun su cantidad.
+Una vez que el usuario realiza la compra se guardan los datos de la compra en la base de datos , que luego se podran ver en el perfil del usuario que realizo la compra
+
+El admin de la tienda podra agregar , editar y eliminar articulos
+
+
+
+## Credenciales del admin
+```
+email: admin@gmail.com
+password: 123456
+
+```
+
 
 ## Project setup
 ```
