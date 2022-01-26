@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container mt-5">
         <h1>Checkout</h1>
 
         <form @submit.prevent>
@@ -15,8 +15,8 @@
     <label for="formGroupExampleInput2">Numero</label>
     <input type="text" class="form-control" v-model="numero" id="formGroupExampleInput2" placeholder="Another input">
   </div>
-  <button v-if="loading === false"  class="btn btn-success" @click="pagar">Pagar  </button>
-  <button v-else disabled="true"  class="btn btn-success" @click="pagar">Espere......  </button>
+  <button v-if="loading === false"  class="btn btn-success p-3" @click="pagar">Pagar  </button>
+  <button v-else disabled="true"  class="btn btn-success p-3" @click="pagar">Espere......  </button>
 
 </form>
     </div>
@@ -34,16 +34,26 @@ import {mapGetters} from 'vuex'
                 localidad: '',
                 calle: '',
                 numero: '',
-                loading: false
+                loading: false,
+                productos: []
               }
             },
             methods: {
+
+              
 
              async pagar(){
 
                 this.loading = true
                 let arr = []
                 for(let val of this.carrito){
+
+                     let encontrado = this.productos.find(valor => valor.id === val.id)
+                     let cantidadFinal = Number(encontrado.cantidad) - Number(val.cantidad)
+
+                 await firebase.firestore().collection("articulos").doc(encontrado.id).update({cantidad: cantidadFinal })
+
+
                     let obj  = {
                       nombre: val.nombre,
                       cantidad: val.cantidad,
@@ -78,7 +88,19 @@ import {mapGetters} from 'vuex'
                    ...mapGetters(['carrito','precioTotal','currentUser'])
 
             },
-            mounted(){
+            async created(){
+                  const snapshot = await firebase.firestore().collection('articulos').get()
+            let docs = []
+             snapshot.forEach((doc) => {
+            docs.push({ ...doc.data(), id: doc.id });
+          });
+
+      
+        
+        this.productos = docs
+
+
+        console.log('productoskssksk',this.productos)
             }
     }
     

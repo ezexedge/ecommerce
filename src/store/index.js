@@ -6,7 +6,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     carrito: [],
-    pepas: 'pepasss',
     currentUser: localStorage.getItem('user') ?   JSON.parse(localStorage.getItem('user'))  : null
   },
   mutations: {

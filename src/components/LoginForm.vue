@@ -19,19 +19,14 @@
 
 
  
-      <button  class=" mt-3 btn btn-primary" @click="submit" :disabled="$v.$invalid" type="submit">Iniciar sesion</button>
+      <button  class=" mt-3 btn btn-primary" @click="submit" :disabled="$v.$invalid"   type="submit">Iniciar sesion</button>
 
 
 </form>
 
         <a href="#" class="font-weight-bold " @click="redirectRegister">Registrarse</a>
    
-    <div class="d-flex flex-column mt-5">
-     <p class="mb-5 font-weight-bold">Ingresar como admin:</p>
-
-     <p>admin@gmail.com</p>
-    <p>123456</p>
-    </div>
+  
 
     </div>
 </template>
@@ -49,7 +44,8 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
             return {
                 email: '',
                 password: '',
-                errorSubmit: false
+                errorSubmit: false,
+                loading: false
             }
         },
         validations:{
@@ -61,6 +57,7 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
         },
         methods:{
            async submit(){
+
                 this.errorSubmit =  false
                     this.$v.$touch()
 
@@ -77,11 +74,12 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
 
        
        const result =  await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+  
 
           if(result){
-
            
               this.$store.dispatch('setUser', result.user)
+          
             
             if(this.email === 'admin@gmail.com'){
               this.$router.push('/admin')

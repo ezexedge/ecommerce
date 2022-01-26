@@ -2,7 +2,7 @@
   <div>
 
     <div v-if="loading === false" class="container mt-5">
-        <div class="col-12 d-flex  flex-wrap  justify-content-around" >
+        <div class="col-12 d-flex p-0 m-0 flex-wrap  d-flex justify-content-between" >
             <div v-for="(item,index) in lista" :key="index" class="card  col-3  ">
   <img class="card-img-top" :src="item.imagen" alt="Card image cap">
   <div class="card-body">
@@ -14,8 +14,14 @@
 
     </div>
     
-    <a href="#!" v-if="encontrado(item.id,carrito) === false" @click="agregar(item)" class="btn btn-primary">Agregar a carrito</a>
+  <div v-if="Number(item.cantidad) > 0">
+    <a href="#!" v-if="encontrado(item.id,carrito) === false " @click="agregar(item)" class="btn btn-primary">Agregar a carrito</a>
       <a href="#!" v-else :disabled="true" class="btn btn-secondary">Agregado al carrito</a>
+  </div>
+        <a href="#!" v-else :disabled="true" class="btn btn-secondary">No hay stock</a>
+
+
+
     <a href="#!"  @click="redirectProducto(item.id)"  class="mt-2 btn btn-success">Ver producto</a>
 
   </div>
@@ -49,8 +55,19 @@ import {mapGetters} from 'vuex'
     },
     methods:{
       agregar(obj){
+
+            console.log('aca esta el valor',obj)
+
+            let newObj = {
+              id: obj.id,
+              cantidad: '1',
+              imagen: obj.imagen,
+              nombre: obj.nombre,
+              precio: obj.precio
+
+            }
       
-             this.$store.dispatch("setProducto", obj)
+             this.$store.dispatch("setProducto", newObj)
       },
       redirectProducto(val){
        
@@ -74,6 +91,11 @@ import {mapGetters} from 'vuex'
       },
           
       encontrado(id,carrito){
+
+
+
+        
+
           let encontrado = carrito.find(val => val.id === id)
           if(encontrado){
             return true

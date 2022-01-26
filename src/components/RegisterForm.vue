@@ -37,7 +37,7 @@
   </div>
 
  
-      <button  class=" mt-3 btn btn-primary" @click="submit" :disabled="$v.$invalid" type="submit">Registrarse</button>
+      <button  class=" mt-3 btn btn-primary" @click="submit" :disabled="$v.$invalid || loading === true" type="submit">Registrarse</button>
   
  
 
@@ -63,7 +63,8 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
                 apellido:'',
                 email: '',
                 password:'',
-                errorSubmit: false
+                errorSubmit: false,
+                loading: false
             }
         },
              validations:{
@@ -75,6 +76,8 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
         },
         methods:{
          async  submit(){
+
+                this.loading = true
                 this.errorSubmit =  false
                     this.$v.$touch()
                     if(this.$v.$invalid){
@@ -85,6 +88,8 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
 
                     const result =  await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                     console.log('resultado',result)
+
+                    
                         if(result.operationType){
 
                             let obj = {
@@ -97,7 +102,7 @@ import {required,email,minLength} from 'vuelidate/lib/validators'
                             await firebase.firestore().collection('users').add(obj)
                             
                             this.$router.push('/login')
-
+                            this.loading = false
                         }
                     }
             },

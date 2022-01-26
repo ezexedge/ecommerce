@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container mt-5">
             <!-- Modal -->
         <div class="modal fade" id="channelModal">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -64,14 +64,29 @@
                         <input  type="text" v-model="precio" placeholder="precio" class="form-control mt-4 mb-4">
                         <input  type="text" v-model="cantidad"  placeholder="cantidad" class="form-control">
          
+
+     <label for="exampleFormControlFile1">Example file input</label>
+
+                        <input type="file"  v-if="imagenModificada === '' && loading === false" @change="previewImageModificado"
+
+                         class="form-control-file" id="exampleFormControlFile1">
+  <div v-if="loading === true" class="spinner-border text-primary" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+                         <p v-if="imagenModificada !== ''" class="text-success">Imagen cargada</p>
+
+  
+
                     </div>
+
+                    
                     <!-- errors -->
                  
                 </form>
               </div>
 
               <div class="modal-footer">
-                              <button  type="button" @click="modificarProducto" class="btn btn-primary">Modificar producto</button>
+                              <button  type="button" @click="modificarProducto"  :disabled="loading === true ? true : false" class="btn btn-primary">Modificar producto</button>
 
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
               </div>
@@ -123,7 +138,6 @@ import * as firebase from "firebase/app";
 import 'firebase/storage';
 import 'firebase/firestore'
     import $ from 'jquery'
-    import {productoById,modificar} from '../api'
     export default {
 
         data(){
@@ -134,7 +148,9 @@ import 'firebase/firestore'
                 cantidad:'',
                 idModificar: '',
                 imagenData: '',
+                imagen: '',
                 imagenUrl: '',
+                imagenModificada:'',
                 loading: false
             }
         },
@@ -181,13 +197,48 @@ import 'firebase/firestore'
       );
 
 },
-            async getProducto(id){
-                const result = await productoById(id)
+            previewImageModificado(event) {
+            this.imagenData = event.target.files[0];  
+          this.loading = true
+
+                          const storageRef = firebase.storage().ref();
+
+            const docRef = storageRef.child(`imagenes/${this.imagenData.name}`);
+        docRef.put(this.imagenData).on(
+        "state_changed",
+        (snapshot) => {
+          console.log(snapshot);
+          
+        },
+        (err) => {
+          console.log(err);
+        },
+        async () => {
+
+          this.imagenModificada = await docRef.getDownloadURL();
+          if(this.imagenModificada !== ''){
+            this.loading = false
+          }
+    
+}
+
+
+      );
+
+},
+
+
+             getProducto(id){
+            //    const result = await productoById(id)
+                   
+          let result = this.productos.find(val => val.id === id)
+
                 console.log('id',result)
                 if(!result.error){
                     this.nombre = result.nombre
                     this.cantidad = result.cantidad
                     this.precio = result.precio
+                    this.imagen = result.imagen
                 }
 
             },
@@ -243,21 +294,27 @@ import 'firebase/firestore'
 
 
             },
-         async   modificarProducto(){
+           async modificarProducto(){
 
                 let obj = {
                     nombre: this.nombre,
                     precio: this.precio,
-                    cantidad: this.cantidad
+                    cantidad: this.cantidad,
+                    imagen: this.imagenModificada
                 } 
 
-                await modificar(obj,this.idModificar)
+              //db.collection("users").doc(doc.id).update({foo: "bar"});
+              await firebase.firestore().collection('articulos').doc(this.idModificar).update({nombre: this.nombre,precio: this.precio,imagen: this.imagenModificada === '' ? this.imagen : this.imagenModificada ,cantidad: this.cantidad})
+                console.log('producto a modificar',obj)
+
+
                 $("#channelModal2").modal('hide')
                 this.llamada()
                 this.nombre = ''
                 this.precio = ''
                 this.cantidad = ''
                 this.idModificar = ''
+                this.imagenModificada = ''
             }  
 
 

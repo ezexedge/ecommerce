@@ -17,7 +17,10 @@
     <td>{{ item.id }}</td>
     <td>{{item.nombre}}</td>
       <td>{{ item.precio }}</td>
-        <td>{{ item.cantidad }}</td>
+        <td>
+          {{item.cantidad}}
+        </td>
+        
                 <td><a href="#" @click="eliminarProducto(item.id)" class="btn btn-danger">Eliminar</a></td>
 
   </tr>
@@ -61,6 +64,9 @@ import {mapGetters} from 'vuex'
                     redirectLogin(){
                 this.$router.push('/login')
                }
+           },
+           created(){
+             console.log('aca esta el valor carrito',this.carrito)
            }
 
     }

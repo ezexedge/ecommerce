@@ -1,8 +1,9 @@
 <template>
-    <div class="container">
+    <div class="container mt-5">
         <h1>Compras realizadas</h1>
 
-    <div class=" d-flex justify-content-center flex-column  ">
+    <div class="col-12 d-flex justify-content-center  ">
+
 
     <div v-if="loading === false && compras.length === 0" class="list-group mt-5">
   <p class="list-group-item list-group-item-action list-group-item-success">No has realizado una compra</p>
@@ -12,7 +13,10 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-        <div v-else  v-for="(item, index) in compras" :key="index" class="mt-5  card text-white bg-primary mb-3 d-inline-block col-6" >
+
+    <div v-else class="col-12 p-0 d-flex justify-content-between flex-wrap ">
+        
+        <div  v-for="(item, index) in compras" :key="index" class="mt-5 p-0  card text-white bg-primary mb-3 col-5" >
   <div class="card-header">fecha: {{item.fecha}}</div>
   <div class="card-body">
     <h4 class="card-title">Valor de compra: {{item.precioFinal}}</h4>
@@ -28,10 +32,11 @@
             <li class="list-group-item active" > precio: {{subitem.precio}}</li>    
 
       </ul>
-    
+    </div>
   </div>
 </div>
 </div>
+
     </div>
 </template>
 
